@@ -9,10 +9,10 @@ import { calculateReadingTime } from "@/lib/utils";
 
 // ─── Directory roots ──────────────────────────────────────────────────────────
 
-export const CONTENT_ROOT    = path.join(process.cwd(), "content");
-export const ARTICLES_DIR    = path.join(CONTENT_ROOT, "articles");
-export const AUTHORS_DIR     = path.join(CONTENT_ROOT, "authors");
-export const CATEGORIES_DIR  = path.join(CONTENT_ROOT, "categories");
+export const CONTENT_ROOT = path.join(process.cwd(), "content");
+export const ARTICLES_DIR = path.join(CONTENT_ROOT, "articles");
+export const AUTHORS_DIR = path.join(CONTENT_ROOT, "authors");
+export const CATEGORIES_DIR = path.join(CONTENT_ROOT, "categories");
 
 // ─── Low-level file helpers ───────────────────────────────────────────────────
 

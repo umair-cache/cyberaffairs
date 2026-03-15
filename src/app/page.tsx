@@ -89,10 +89,10 @@ function HeroSection({ article }: { article: ArticleCardData }) {
       <article className="group relative w-full rounded-2xl overflow-hidden border border-[#E5E7EB] bg-white hover:border-[#4F46E5] hover:shadow-[0_8px_40px_rgba(79,70,229,0.12)] transition-all duration-300">
         <div className="grid grid-cols-1 lg:grid-cols-2">
 
-          {/* Cover image */}
+          {/* Cover image - Hidden from screen readers to prevent redundant link announcements */}
           <Link
             href={`/blog/${article.slug}`}
-            aria-label={`Read featured article: ${article.title}`}
+            aria-hidden="true"
             className="relative block aspect-[16/10] lg:aspect-auto lg:min-h-[420px] overflow-hidden bg-[#F5F3FF] focus-visible:outline-none"
             tabIndex={-1}
           >
@@ -153,7 +153,7 @@ function HeroSection({ article }: { article: ArticleCardData }) {
 
             {/* Author + date */}
             <div className="flex items-center gap-3">
-              <AuthorAvatar name={article.author} size={10} />
+              <AuthorAvatar name={article.author} className="w-10 h-10 text-base" />
               <div className="flex flex-col gap-0.5">
                 <span className="font-sans text-sm font-semibold text-[#111111]">
                   {article.author}
@@ -341,10 +341,10 @@ function CategorySpotlight({ category, articles }: CategorySpotlightProps) {
 function SideArticleRow({ article }: { article: ArticleCardData }) {
   return (
     <article className="group flex items-start gap-3 p-4 hover:bg-[#F5F3FF] transition-colors duration-150">
-      {/* Thumbnail */}
+      {/* Thumbnail - Hidden from screen readers to prevent redundant link announcements */}
       <Link
         href={`/blog/${article.slug}`}
-        aria-label={`Read: ${article.title}`}
+        aria-hidden="true"
         className="relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-[#F5F3FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F46E5]"
         tabIndex={-1}
       >
@@ -490,7 +490,8 @@ function CtaBanner() {
 
 // ─── Author avatar ────────────────────────────────────────────────────────────
 
-function AuthorAvatar({ name, size = 8 }: { name: string; size?: number }) {
+// Optimized fix: Tailwind CSS dynamic class compilation bug removed
+function AuthorAvatar({ name, className = "w-8 h-8 text-sm" }: { name: string; className?: string }) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -500,7 +501,7 @@ function AuthorAvatar({ name, size = 8 }: { name: string; size?: number }) {
 
   return (
     <span
-      className={`inline-flex items-center justify-center w-${size} h-${size} rounded-full bg-[#4F46E5] text-white font-sans font-semibold text-sm flex-shrink-0`}
+      className={`inline-flex items-center justify-center rounded-full bg-[#4F46E5] text-white font-sans font-semibold flex-shrink-0 ${className}`}
       aria-hidden="true"
     >
       {initials}

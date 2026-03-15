@@ -28,21 +28,25 @@ type SubmitStatus = "idle" | "submitting" | "success" | "error";
 function validate(form: FormState): FormErrors {
   const errors: FormErrors = {};
 
-  if (!form.name.trim())
+  if (!form.name.trim()) {
     errors.name = "Name is required.";
+  }
 
-  if (!form.email.trim())
+  if (!form.email.trim()) {
     errors.email = "Email address is required.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
     errors.email = "Please enter a valid email address.";
+  }
 
-  if (!form.subject.trim())
+  if (!form.subject.trim()) {
     errors.subject = "Subject is required.";
+  }
 
-  if (!form.message.trim())
+  if (!form.message.trim()) {
     errors.message = "Message is required.";
-  else if (form.message.trim().length < 20)
+  } else if (form.message.trim().length < 20) {
     errors.message = "Message must be at least 20 characters.";
+  }
 
   return errors;
 }
@@ -50,13 +54,13 @@ function validate(form: FormState): FormErrors {
 // ─── Contact reasons ──────────────────────────────────────────────────────────
 
 const subjectOptions = [
-  { value: "",                   label: "Select a subject…"         },
-  { value: "tip",                label: "Submit a News Tip"         },
-  { value: "research",           label: "Share Security Research"   },
-  { value: "correction",         label: "Article Correction"        },
-  { value: "collaboration",      label: "Collaboration Inquiry"     },
-  { value: "advertising",        label: "Advertising / Sponsorship" },
-  { value: "other",              label: "Other"                     },
+  { value: "",              label: "Select a subject…"         },
+  { value: "tip",           label: "Submit a News Tip"         },
+  { value: "research",      label: "Share Security Research"   },
+  { value: "correction",    label: "Article Correction"        },
+  { value: "collaboration", label: "Collaboration Inquiry"     },
+  { value: "advertising",   label: "Advertising / Sponsorship" },
+  { value: "other",         label: "Other"                     },
 ];
 
 // ─── Contact info cards ───────────────────────────────────────────────────────
@@ -143,7 +147,7 @@ function inputClass(hasError: boolean): string {
 
 function SuccessMessage({ onReset }: { onReset: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center text-center py-12 gap-5">
+    <div className="flex flex-col items-center justify-center text-center py-12 gap-5 animate-in fade-in duration-300">
       <span
         className="flex items-center justify-center w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-200"
         aria-hidden="true"
@@ -179,13 +183,14 @@ function ContactForm() {
     subject: "",
     message: "",
   });
-  const [errors,       setErrors]       = useState<FormErrors>({});
+  const [errors,        setErrors]       = useState<FormErrors>({});
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
       setForm((prev) => ({ ...prev, [name]: value }));
+      
       // Clear field error on change
       if (errors[name as keyof FormErrors]) {
         setErrors((prev) => ({ ...prev, [name]: undefined }));
@@ -201,7 +206,7 @@ function ContactForm() {
       const validationErrors = validate(form);
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
-        // Focus first error field
+        // Focus first error field for accessibility
         const firstErrorKey = Object.keys(validationErrors)[0];
         document.getElementById(firstErrorKey)?.focus();
         return;
@@ -211,7 +216,7 @@ function ContactForm() {
       setErrors({});
 
       try {
-        // Simulate submission — replace with your API endpoint
+        // Simulate submission — replace with your API endpoint fetch call
         await new Promise((resolve) => setTimeout(resolve, 1200));
         setSubmitStatus("success");
       } catch {
@@ -236,7 +241,7 @@ function ContactForm() {
       onSubmit={handleSubmit}
       noValidate
       aria-label="Contact form"
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-5 relative"
     >
       {/* Name + Email row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -253,6 +258,7 @@ function ContactForm() {
             aria-describedby={errors.name ? "name-error" : undefined}
             aria-invalid={!!errors.name}
             className={inputClass(!!errors.name)}
+            disabled={submitStatus === "submitting"}
           />
         </Field>
 
@@ -269,6 +275,7 @@ function ContactForm() {
             aria-describedby={errors.email ? "email-error" : undefined}
             aria-invalid={!!errors.email}
             className={inputClass(!!errors.email)}
+            disabled={submitStatus === "submitting"}
           />
         </Field>
       </div>
@@ -284,6 +291,7 @@ function ContactForm() {
           aria-describedby={errors.subject ? "subject-error" : undefined}
           aria-invalid={!!errors.subject}
           className={inputClass(!!errors.subject)}
+          disabled={submitStatus === "submitting"}
         >
           {subjectOptions.map((opt) => (
             <option key={opt.value} value={opt.value} disabled={opt.value === ""}>
@@ -306,6 +314,7 @@ function ContactForm() {
           aria-describedby={errors.message ? "message-error" : undefined}
           aria-invalid={!!errors.message}
           className={`${inputClass(!!errors.message)} resize-y min-h-[140px]`}
+          disabled={submitStatus === "submitting"}
         />
         <span className="font-sans text-xs text-[#9CA3AF] text-right">
           {form.message.length} / 2000
@@ -316,7 +325,7 @@ function ContactForm() {
       {submitStatus === "error" && (
         <div
           role="alert"
-          className="flex items-start gap-3 p-4 rounded-lg bg-red-50 border border-red-200"
+          className="flex items-start gap-3 p-4 rounded-lg bg-red-50 border border-red-200 animate-in fade-in"
         >
           <ErrorIcon className="text-[#DC2626] mt-0.5 flex-shrink-0" />
           <p className="font-sans text-sm text-[#DC2626]">
@@ -417,6 +426,7 @@ export default function ContactPage() {
                 </div>
               </div>
               
+              <a
                 href={card.href}
                 target={card.external ? "_blank" : undefined}
                 rel={card.external ? "noopener noreferrer" : undefined}
@@ -441,7 +451,7 @@ export default function ContactPage() {
                 <p className="font-sans text-xs text-[#6B7280] leading-relaxed">
                   If you have discovered a security vulnerability in our
                   platform, please disclose it responsibly via{" "}
-                  
+                  <a
                     href="mailto:security@cyberaffairs.site"
                     className="text-[#4F46E5] hover:underline font-semibold"
                   >

@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/about`,
   },
   openGraph: {
-    type:        "website",
-    url:         `${siteConfig.url}/about`,
-    title:       `About | ${siteConfig.siteName}`,
+    type: "website",
+    url: `${siteConfig.url}/about`,
+    title: `About | ${siteConfig.siteName}`,
     description: `Learn about ${siteConfig.siteName} — a cybersecurity news and intelligence platform.`,
-    siteName:    siteConfig.siteName,
+    siteName: siteConfig.siteName,
   },
 };
 
@@ -25,14 +25,14 @@ export const metadata: Metadata = {
 function AboutStructuredData() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type":    "AboutPage",
-    name:       `About ${siteConfig.siteName}`,
-    url:        `${siteConfig.url}/about`,
+    "@type": "AboutPage",
+    name: `About ${siteConfig.siteName}`,
+    url: `${siteConfig.url}/about`,
     description: siteConfig.description,
     isPartOf: {
       "@type": "WebSite",
-      name:    siteConfig.siteName,
-      url:     siteConfig.url,
+      name: siteConfig.siteName,
+      url: siteConfig.url,
     },
   };
 
@@ -48,45 +48,45 @@ function AboutStructuredData() {
 
 const values = [
   {
-    icon:        <ShieldIcon />,
-    title:       "Accuracy First",
+    icon: <ShieldIcon />,
+    title: "Accuracy First",
     description:
       "Every article is thoroughly researched and verified before publication. We cite primary sources and correct errors transparently.",
   },
   {
-    icon:        <EyeIcon />,
-    title:       "Independent Voice",
+    icon: <EyeIcon />,
+    title: "Independent Voice",
     description:
       "We are editorially independent. Our coverage is not influenced by advertisers, vendors, or any external parties.",
   },
   {
-    icon:        <LockIcon />,
-    title:       "Privacy by Default",
+    icon: <LockIcon />,
+    title: "Privacy by Default",
     description:
       "We practice what we preach. Minimal data collection, no invasive tracking, and full respect for reader privacy.",
   },
   {
-    icon:        <UsersIcon />,
-    title:       "Community Driven",
+    icon: <UsersIcon />,
+    title: "Community Driven",
     description:
       "Built for the security community — practitioners, researchers, and enthusiasts who need actionable intelligence.",
   },
 ];
 
 const coverageAreas = [
-  { label: "Cybersecurity Threats",  href: "/category/cybersecurity",        description: "Breaking vulnerabilities, CVEs, and attack campaigns"  },
-  { label: "Hacking Techniques",     href: "/category/hacking",              description: "Offensive security, exploits, and pen testing"          },
-  { label: "Digital Privacy",        href: "/category/privacy",              description: "Surveillance, data protection, and privacy tools"       },
-  { label: "Threat Intelligence",    href: "/category/threat-intelligence",  description: "APT tracking, malware analysis, and IOCs"               },
-  { label: "Tech News",              href: "/category/tech-news",            description: "Security-relevant technology and industry updates"      },
-  { label: "Security Research",      href: "/category/security-research",    description: "Academic and industry security research findings"       },
+  { label: "Cybersecurity Threats", href: "/category/cybersecurity", description: "Breaking vulnerabilities, CVEs, and attack campaigns" },
+  { label: "Hacking Techniques", href: "/category/hacking", description: "Offensive security, exploits, and pen testing" },
+  { label: "Digital Privacy", href: "/category/privacy", description: "Surveillance, data protection, and privacy tools" },
+  { label: "Threat Intelligence", href: "/category/threat-intelligence", description: "APT tracking, malware analysis, and IOCs" },
+  { label: "Tech News", href: "/category/tech-news", description: "Security-relevant technology and industry updates" },
+  { label: "Security Research", href: "/category/security-research", description: "Academic and industry security research findings" },
 ];
 
 const stats = [
-  { value: "100+",  label: "Articles Published"     },
-  { value: "6",     label: "Coverage Categories"    },
-  { value: "Daily", label: "Update Frequency"       },
-  { value: "Free",  label: "Always & Forever"       },
+  { value: "100+", label: "Articles Published" },
+  { value: "6", label: "Coverage Categories" },
+  { value: "Daily", label: "Update Frequency" },
+  { value: "Free", label: "Always & Forever" },
 ];
 
 // ─── Section: Hero ────────────────────────────────────────────────────────────
@@ -116,7 +116,7 @@ function HeroSection() {
             <ShieldSmallIcon />
           </span>
           <span className="font-sans text-xs font-bold uppercase tracking-widest text-[#818CF8]">
-            About CyberAffairs
+            About {siteConfig.siteName}
           </span>
         </div>
 
@@ -328,8 +328,11 @@ function ContactCta() {
           <ArrowRightIcon />
         </Link>
         
+        {/* Fixed: Added missing opening <a> tag here */}
+        <a
           href={`mailto:${siteConfig.author.email}`}
           className="inline-flex items-center gap-2 font-sans text-sm font-semibold px-6 py-3 rounded-lg bg-white text-[#374151] border border-[#E5E7EB] hover:border-[#4F46E5] hover:text-[#4F46E5] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F46E5] focus-visible:ring-offset-2"
+          aria-label="Email our editorial team"
         >
           <MailIcon />
           {siteConfig.author.email}

@@ -1,26 +1,37 @@
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 import matter from "gray-matter";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const SITE_URL      = "https://cyberaffairs.site";
-const OUTPUT_PATH   = path.join(process.cwd(), "public", "sitemap.xml");
-const ARTICLES_DIR  = path.join(process.cwd(), "content", "articles");
+const SITE_URL = "https://cyberaffairs.site";
+const OUTPUT_PATH = path.join(process.cwd(), "public", "sitemap.xml");
+const ARTICLES_DIR = path.join(process.cwd(), "content", "articles");
 const CATEGORIES_DIR = path.join(process.cwd(), "content", "categories");
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface SitemapUrl {
-  loc:        string;
-  lastmod?:   string;
+  loc: string;
+  lastmod?: string;
   changefreq: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
-  priority:   number;
+  priority: number;
+}
+
+// Define exactly what we expect to find in your Markdown frontmatter
+interface Frontmatter {
+  slug?: string;
+  date?: string;
+  updated?: string;
+  published?: boolean | string;
+  featured?: boolean | string;
+  // This tells TypeScript: "There might be other fields, but we don't know exactly what they are, and that's okay."
+  [key: string]: unknown; 
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function toISODate(dateStr?: string): string {
+function toISODate(dateStr?: string | Date): string {
   if (!dateStr) return new Date().toISOString().slice(0, 10);
   try {
     return new Date(dateStr).toISOString().slice(0, 10);
@@ -29,26 +40,43 @@ function toISODate(dateStr?: string): string {
   }
 }
 
-function readMarkdownFiles(directory: string): Array<Record<string, string>> {
-  if (!fs.existsSync(directory)) return [];
+// Fixed the return type here (no more "any"!)
+function readMarkdownFiles(directory: string): Frontmatter[] {
+  if (!fs.existsSync(directory)) {
+    console.warn(`⚠️ Directory not found: ${directory}`);
+    return [];
+  }
 
-  return fs
-    .readdirSync(directory)
-    .filter((file) => file.endsWith(".md"))
+  const files = fs.readdirSync(directory);
+  
+  return files
+    .filter((file) => file.endsWith(".md") || file.endsWith(".mdx"))
     .map((file) => {
-      const raw        = fs.readFileSync(path.join(directory, file), "utf-8");
-      const { data }   = matter(raw);
-      return data as Record<string, string>;
+      const filePath = path.join(directory, file);
+      const rawFileContent = fs.readFileSync(filePath, "utf-8");
+      
+      const { data } = matter(rawFileContent);
+      
+      // Cast it safely to our new Frontmatter interface
+      const frontmatter = data as Frontmatter;
+      
+      // Fallback: Use the filename (without extension) if slug isn't in frontmatter
+      if (!frontmatter.slug) {
+        frontmatter.slug = file.replace(/\.mdx?$/, "");
+      }
+      
+      return frontmatter;
     });
 }
 
 function escapeXml(str: string): string {
+  if (!str) return "";
   return str
-    .replace(/&/g,  "&amp;")
-    .replace(/</g,  "&lt;")
-    .replace(/>/g,  "&gt;")
-    .replace(/"/g,  "&quot;")
-    .replace(/'/g,  "&apos;");
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 function buildUrlTag(entry: SitemapUrl): string {
@@ -73,28 +101,28 @@ function getStaticUrls(): SitemapUrl[] {
 
   return [
     {
-      loc:        `${SITE_URL}/`,
-      lastmod:    today,
+      loc: `${SITE_URL}/`,
+      lastmod: today,
       changefreq: "daily",
-      priority:   1.0,
+      priority: 1.0,
     },
     {
-      loc:        `${SITE_URL}/blog`,
-      lastmod:    today,
+      loc: `${SITE_URL}/blog`,
+      lastmod: today,
       changefreq: "daily",
-      priority:   0.9,
+      priority: 0.9,
     },
     {
-      loc:        `${SITE_URL}/about`,
-      lastmod:    today,
+      loc: `${SITE_URL}/about`,
+      lastmod: today,
       changefreq: "monthly",
-      priority:   0.6,
+      priority: 0.6,
     },
     {
-      loc:        `${SITE_URL}/contact`,
-      lastmod:    today,
+      loc: `${SITE_URL}/contact`,
+      lastmod: today,
       changefreq: "monthly",
-      priority:   0.5,
+      priority: 0.5,
     },
   ];
 }
@@ -105,22 +133,22 @@ function getArticleUrls(): SitemapUrl[] {
   return articles
     .filter((fm) => fm.published === true || fm.published === "true")
     .map((fm) => ({
-      loc:        `${SITE_URL}/blog/${fm.slug}`,
-      lastmod:    toISODate(fm.updated ?? fm.date),
+      loc: `${SITE_URL}/blog/${fm.slug}`,
+      lastmod: toISODate(fm.updated ?? fm.date),
       changefreq: "weekly" as const,
-      priority:   fm.featured === true || fm.featured === "true" ? 0.9 : 0.8,
+      priority: fm.featured === true || fm.featured === "true" ? 0.9 : 0.8,
     }));
 }
 
 function getCategoryUrls(): SitemapUrl[] {
   const categories = readMarkdownFiles(CATEGORIES_DIR);
-  const today      = new Date().toISOString().slice(0, 10);
+  const today = new Date().toISOString().slice(0, 10);
 
   return categories.map((fm) => ({
-    loc:        `${SITE_URL}/category/${fm.slug}`,
-    lastmod:    today,
+    loc: `${SITE_URL}/category/${fm.slug}`,
+    lastmod: today,
     changefreq: "weekly" as const,
-    priority:   0.7,
+    priority: 0.7,
   }));
 }
 
@@ -136,9 +164,7 @@ function buildSitemap(urls: SitemapUrl[]): string {
     '  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
     '  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9',
     '    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">',
-    "",
     urlTags,
-    "",
     "</urlset>",
   ].join("\n");
 }
@@ -149,8 +175,8 @@ async function generateSitemap(): Promise<void> {
   console.log("🗺️  Generating sitemap…");
 
   try {
-    const staticUrls   = getStaticUrls();
-    const articleUrls  = getArticleUrls();
+    const staticUrls = getStaticUrls();
+    const articleUrls = getArticleUrls();
     const categoryUrls = getCategoryUrls();
 
     const allUrls = [
@@ -160,8 +186,9 @@ async function generateSitemap(): Promise<void> {
     ];
 
     // Deduplicate by loc
-    const seen    = new Set<string>();
+    const seen = new Set<string>();
     const uniqueUrls = allUrls.filter((u) => {
+      if (!u.loc) return false;
       if (seen.has(u.loc)) return false;
       seen.add(u.loc);
       return true;

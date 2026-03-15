@@ -27,12 +27,15 @@ function getCategoryColor(category: string): string {
 // ─── Author avatar ────────────────────────────────────────────────────────────
 
 function AuthorAvatar({ name }: { name: string }) {
+  // Added a safety check in case 'name' is empty or undefined
   const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+    ? name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "??";
 
   return (
     <span
@@ -74,7 +77,8 @@ function ShareButtons({ title, slug }: ShareButtonsProps) {
         Share
       </span>
       {links.map((link) => (
-        
+        // Fixed: Added the missing <a> tag here
+        <a
           key={link.label}
           href={link.href}
           target="_blank"

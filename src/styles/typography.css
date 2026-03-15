@@ -9,14 +9,7 @@
   line-height: 1.8;
   color: var(--color-text);
   max-width: var(--content-max);
-  word-break: break-word;
   overflow-wrap: break-word;
-}
-
-/* ─── Vertical rhythm ────────────────────────────────────────────────────────── */
-
-.prose > * + * {
-  margin-top: 1.5em;
 }
 
 /* ─── Headings ───────────────────────────────────────────────────────────────── */
@@ -31,8 +24,16 @@
   font-weight: 700;
   color: var(--color-heading);
   line-height: 1.25;
-  margin-top: 2.5em;
+  margin-top: 2em;
   margin-bottom: 0.75em;
+}
+
+/* Tighter top margin if heading is the very first element */
+.prose h1:first-child,
+.prose h2:first-child,
+.prose h3:first-child,
+.prose h4:first-child {
+  margin-top: 0;
 }
 
 .prose h1 { font-size: 2rem; }
@@ -51,7 +52,8 @@
 /* ─── Paragraphs ─────────────────────────────────────────────────────────────── */
 
 .prose p {
-  margin-bottom: 1.4em;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
 }
 
 /* ─── Links ──────────────────────────────────────────────────────────────────── */
@@ -89,26 +91,24 @@
 .prose ul,
 .prose ol {
   padding-left: 1.75em;
-  margin-bottom: 1.4em;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
 }
 
 .prose ul > li { list-style-type: disc;    }
 .prose ol > li { list-style-type: decimal; }
 
 .prose li {
-  margin-bottom: 0.4em;
-  padding-left: 0.25em;
-}
-
-.prose li > p {
+  margin-top: 0.5em;
   margin-bottom: 0.5em;
+  padding-left: 0.25em;
 }
 
 /* Nested lists */
 .prose li > ul,
 .prose li > ol {
-  margin-top: 0.4em;
-  margin-bottom: 0.4em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 /* Task lists (GFM) */
@@ -125,7 +125,7 @@
 
 .prose .task-list-item input[type="checkbox"] {
   accent-color: var(--color-accent);
-  margin-top: 0.25em;
+  margin-top: 0.35em;
   flex-shrink: 0;
 }
 
@@ -134,15 +134,20 @@
 .prose blockquote {
   border-left: 4px solid var(--color-accent);
   padding: 1rem 1.5rem;
-  margin: 2em 0;
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
   background-color: var(--color-surface-2);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   font-style: italic;
   color: var(--color-text-muted);
 }
 
-.prose blockquote > * + * {
-  margin-top: 0.75em;
+.prose blockquote p:first-of-type {
+  margin-top: 0;
+}
+
+.prose blockquote p:last-of-type {
+  margin-bottom: 0;
 }
 
 .prose blockquote strong {
@@ -169,7 +174,8 @@
   padding: 1.5rem;
   border-radius: var(--radius-md);
   overflow-x: auto;
-  margin: 2em 0;
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
   font-family: var(--font-mono);
   font-size: 0.875rem;
   line-height: 1.7;
@@ -192,7 +198,8 @@
 .prose hr {
   border: none;
   border-top: 2px solid var(--color-border);
-  margin: 3em 0;
+  margin-top: 3em;
+  margin-bottom: 3em;
 }
 
 /* ─── Tables ─────────────────────────────────────────────────────────────────── */
@@ -200,7 +207,8 @@
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2em 0;
+  margin-top: 2em;
+  margin-bottom: 2em;
   font-size: 0.95em;
   font-family: var(--font-sans);
   display: block;
@@ -237,8 +245,10 @@
 
 .prose img {
   border-radius: var(--radius-md);
-  margin: 2em auto;
+  margin-top: 2em;
+  margin-bottom: 2em;
   width: 100%;
+  max-width: 100%;
   height: auto;
   object-fit: cover;
   box-shadow: var(--shadow-md);
@@ -247,7 +257,8 @@
 /* ─── Figure & Caption ───────────────────────────────────────────────────────── */
 
 .prose figure {
-  margin: 2em 0;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .prose figcaption {
@@ -259,14 +270,12 @@
   font-style: italic;
 }
 
-/* ─── Abbreviations ──────────────────────────────────────────────────────────── */
+/* ─── Abbreviations & Keyboard input ─────────────────────────────────────────── */
 
 .prose abbr[title] {
   text-decoration: underline dotted;
   cursor: help;
 }
-
-/* ─── Keyboard input ─────────────────────────────────────────────────────────── */
 
 .prose kbd {
   font-family: var(--font-mono);
@@ -278,8 +287,6 @@
   padding: 0.1em 0.4em;
   color: var(--color-text);
 }
-
-/* ─── Mark / Highlight ───────────────────────────────────────────────────────── */
 
 .prose mark {
   background-color: rgba(79, 70, 229, 0.15);

@@ -236,18 +236,23 @@ export default async function ArticlePage({ params }: PageProps) {
         <ArticleHeader article={article} />
 
         {/* Body: rendered markdown */}
-        <ArticleContent
-          content={article.content}
-          tags={article.tags}
-          slug={article.slug}
-          title={article.title}
-        />
+        {/* 🔥 THIS IS WHERE THE TAILWIND TYPOGRAPHY MAGIC HAPPENS 🔥 */}
+        <div className="prose prose-slate max-w-none mx-auto lg:prose-lg dark:prose-invert mt-10">
+          <ArticleContent
+            content={article.content}
+            tags={article.tags}
+            slug={article.slug}
+            title={article.title}
+          />
+        </div>
 
         {/* Related posts */}
-        <RelatedPosts
-          posts={relatedPosts}
-          currentSlug={article.slug}
-        />
+        <div className="mt-16">
+          <RelatedPosts
+            posts={relatedPosts}
+            currentSlug={article.slug}
+          />
+        </div>
 
       </Container>
     </>

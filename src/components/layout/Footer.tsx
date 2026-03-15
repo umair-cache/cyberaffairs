@@ -57,7 +57,7 @@ interface SocialLinkProps {
 
 function SocialLink({ href, label, children }: SocialLinkProps) {
   return (
-    
+    <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"

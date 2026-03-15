@@ -21,7 +21,7 @@ export interface Article extends ArticleFrontmatter {
 }
 
 export interface ArticleCardData
-  extends Pick
+  extends Pick<
     ArticleFrontmatter,
     | "title"
     | "slug"
@@ -33,5 +33,5 @@ export interface ArticleCardData
     | "excerpt"
     | "featured"
   > {
-  readingTime: string;
+  readingTime?: string;
 }
