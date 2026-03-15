@@ -1,0 +1,289 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Prose / Article Typography
+   Applied via the `.prose` class on the article content wrapper.
+───────────────────────────────────────────────────────────────────────────── */
+
+.prose {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;       /* 18px */
+  line-height: 1.8;
+  color: var(--color-text);
+  max-width: var(--content-max);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ─── Vertical rhythm ────────────────────────────────────────────────────────── */
+
+.prose > * + * {
+  margin-top: 1.5em;
+}
+
+/* ─── Headings ───────────────────────────────────────────────────────────────── */
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--color-heading);
+  line-height: 1.25;
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
+}
+
+.prose h1 { font-size: 2rem; }
+
+.prose h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.prose h3 { font-size: 1.25rem; }
+.prose h4 { font-size: 1.1rem;  font-weight: 600; }
+.prose h5 { font-size: 1rem;    font-weight: 600; }
+.prose h6 { font-size: 0.9rem;  font-weight: 600; color: var(--color-text-muted); }
+
+/* ─── Paragraphs ─────────────────────────────────────────────────────────────── */
+
+.prose p {
+  margin-bottom: 1.4em;
+}
+
+/* ─── Links ──────────────────────────────────────────────────────────────────── */
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color var(--transition-fast);
+}
+
+.prose a:hover {
+  color: var(--color-primary);
+}
+
+/* ─── Emphasis ───────────────────────────────────────────────────────────────── */
+
+.prose strong {
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose del {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+/* ─── Lists ──────────────────────────────────────────────────────────────────── */
+
+.prose ul,
+.prose ol {
+  padding-left: 1.75em;
+  margin-bottom: 1.4em;
+}
+
+.prose ul > li { list-style-type: disc;    }
+.prose ol > li { list-style-type: decimal; }
+
+.prose li {
+  margin-bottom: 0.4em;
+  padding-left: 0.25em;
+}
+
+.prose li > p {
+  margin-bottom: 0.5em;
+}
+
+/* Nested lists */
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+/* Task lists (GFM) */
+.prose ul.contains-task-list {
+  list-style: none;
+  padding-left: 0.5em;
+}
+
+.prose .task-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+
+.prose .task-list-item input[type="checkbox"] {
+  accent-color: var(--color-accent);
+  margin-top: 0.25em;
+  flex-shrink: 0;
+}
+
+/* ─── Blockquote ─────────────────────────────────────────────────────────────── */
+
+.prose blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding: 1rem 1.5rem;
+  margin: 2em 0;
+  background-color: var(--color-surface-2);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.prose blockquote > * + * {
+  margin-top: 0.75em;
+}
+
+.prose blockquote strong {
+  color: var(--color-text-muted);
+}
+
+/* ─── Inline code ────────────────────────────────────────────────────────────── */
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--color-surface-2);
+  color: var(--color-accent);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* ─── Code blocks ────────────────────────────────────────────────────────────── */
+
+.prose pre {
+  background-color: var(--color-primary);
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 2em 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  tab-size: 2;
+}
+
+/* Reset inline code styles inside a block */
+.prose pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+  border-radius: 0;
+}
+
+/* ─── Horizontal rule ────────────────────────────────────────────────────────── */
+
+.prose hr {
+  border: none;
+  border-top: 2px solid var(--color-border);
+  margin: 3em 0;
+}
+
+/* ─── Tables ─────────────────────────────────────────────────────────────────── */
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: 0.95em;
+  font-family: var(--font-sans);
+  display: block;
+  overflow-x: auto;
+}
+
+.prose thead {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.prose th {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.prose td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.prose tbody tr:nth-child(even) td {
+  background-color: var(--color-surface-2);
+}
+
+.prose tbody tr:hover td {
+  background-color: var(--color-accent-glow);
+}
+
+/* ─── Images ─────────────────────────────────────────────────────────────────── */
+
+.prose img {
+  border-radius: var(--radius-md);
+  margin: 2em auto;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  box-shadow: var(--shadow-md);
+}
+
+/* ─── Figure & Caption ───────────────────────────────────────────────────────── */
+
+.prose figure {
+  margin: 2em 0;
+}
+
+.prose figcaption {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 0.75em;
+  font-style: italic;
+}
+
+/* ─── Abbreviations ──────────────────────────────────────────────────────────── */
+
+.prose abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* ─── Keyboard input ─────────────────────────────────────────────────────────── */
+
+.prose kbd {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  background-color: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.4em;
+  color: var(--color-text);
+}
+
+/* ─── Mark / Highlight ───────────────────────────────────────────────────────── */
+
+.prose mark {
+  background-color: rgba(79, 70, 229, 0.15);
+  color: var(--color-primary);
+  padding: 0.1em 0.2em;
+  border-radius: 2px;
+}
